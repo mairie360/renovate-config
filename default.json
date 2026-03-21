@@ -14,6 +14,11 @@
   "prHourlyLimit": 0,
   "packageRules": [
     {
+      "description": "Éviter l'automerge sur les versions 0.x",
+      "matchCurrentVersion": "/^0\\./",
+      "automerge": false
+    },
+    {
       "description": "Groupement & Automerge Rust (Minor/Patch)",
       "matchManagers": ["cargo"],
       "matchUpdateTypes": ["minor", "patch"],
@@ -39,11 +44,6 @@
       "matchManagers": ["github-actions"],
       "pinDigests": true,
       "automerge": true
-    },
-    {
-      "description": "Éviter l'automerge sur les versions 0.x",
-      "matchCurrentVersion": "/^0\\./",
-      "automerge": false
     }
   ],
   "hostRules": [
