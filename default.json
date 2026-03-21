@@ -9,22 +9,32 @@
   "timezone": "Europe/Paris",
   "schedule": ["at any time"],
   "labels": ["dependencies"],
+  "platformAutomerge": true, 
   "packageRules": [
     {
-      "description": "Groupement Rust",
+      "description": "Groupement & Automerge Rust (Minor/Patch)",
       "matchManagers": ["cargo"],
-      "groupName": "rust dependencies"
-    },
-    {
-      "description": "Groupement TypeScript & Automerge non-major",
-      "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "rust dependencies",
       "automerge": true
     },
     {
-      "description": "Sécurité GHA : Pin SHA",
+      "description": "Groupement & Automerge TypeScript (Minor/Patch)",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "typescript dependencies",
+      "automerge": true
+    },
+    {
+      "description": "Sécurité GHA : Pin SHA + Automerge",
       "matchManagers": ["github-actions"],
-      "pinDigests": true
+      "pinDigests": true,
+      "automerge": true
+    },
+    {
+      "description": "Éviter l'automerge sur les versions 0.x (souvent instables en Rust/TS)",
+      "matchCurrentVersion": "/^0\\./",
+      "automerge": false
     }
   ],
   "hostRules": [
