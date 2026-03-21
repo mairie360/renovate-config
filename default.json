@@ -44,6 +44,17 @@
       "matchManagers": ["github-actions"],
       "pinDigests": true,
       "automerge": true
+    },
+    {
+      "description": "Automerge TOTAL (Majors incluses) pour le dev local",
+      "matchFileNames": ["development.Dockerfile", "docker-compose.yml"],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Protection stricte du Dockerfile de production",
+      "matchFileNames": ["Dockerfile"],
+      "automerge": false
     }
   ],
   "hostRules": [
