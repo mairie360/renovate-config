@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":separateMajorReleases",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "dependencyDashboard": true,
+  "timezone": "Europe/Paris",
+  "schedule": ["at any time"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "Groupement Rust",
+      "matchManagers": ["cargo"],
+      "groupName": "rust dependencies"
+    },
+    {
+      "description": "Groupement TypeScript & Automerge non-major",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Sécurité GHA : Pin SHA",
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
+    }
+  ],
+  "hostRules": [
+    {
+      "matchHost": "npm.pkg.github.com",
+      "token": "{{secrets.GPR_TOKEN}}",
+      "hostType": "npm"
+    }
+  ]
+}
