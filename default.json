@@ -9,7 +9,9 @@
   "timezone": "Europe/Paris",
   "schedule": ["at any time"],
   "labels": ["dependencies"],
-  "platformAutomerge": true, 
+  "platformAutomerge": true,
+  "prConcurrentLimit": 20,
+  "prHourlyLimit": 0,
   "packageRules": [
     {
       "description": "Groupement & Automerge Rust (Minor/Patch)",
@@ -26,13 +28,20 @@
       "automerge": true
     },
     {
+      "description": "Force le registre GitHub pour les packages @mairie360",
+      "matchPackagePatterns": ["^@mairie360/"],
+      "registryUrls": ["https://npm.pkg.github.com"],
+      "groupName": "mairie360 internal",
+      "automerge": true
+    },
+    {
       "description": "Sécurité GHA : Pin SHA + Automerge",
       "matchManagers": ["github-actions"],
       "pinDigests": true,
       "automerge": true
     },
     {
-      "description": "Éviter l'automerge sur les versions 0.x (souvent instables en Rust/TS)",
+      "description": "Éviter l'automerge sur les versions 0.x",
       "matchCurrentVersion": "/^0\\./",
       "automerge": false
     }
@@ -40,8 +49,8 @@
   "hostRules": [
     {
       "matchHost": "npm.pkg.github.com",
-      "token": "{{secrets.GPR_TOKEN}}",
-      "hostType": "npm"
+      "hostType": "npm",
+      "token": "{{secrets.MEND_RENOVATE_PACKAGE_TOKEN}}"
     }
   ]
 }
