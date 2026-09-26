@@ -54,6 +54,25 @@
       "description": "Protection stricte du Dockerfile de production",
       "matchFileNames": ["Dockerfile"],
       "automerge": false
+    },
+    {
+      "description": "The database and liquibase-migrations images are released with the same tag: bump them together in one PR",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/mairie360/database",
+        "ghcr.io/mairie360/liquibase-migrations"
+      ],
+      "groupName": "mairie360 database schema"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Track pins annotated with `# renovate: datasource=<ds> depName=<name>` on the line above (e.g. TEST_DB_VERSION in .cargo/config.toml)",
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)\\.cargo/config\\.toml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>\\S+)\\s+\\w+ = \"(?<currentValue>[^\"]+)\""
+      ]
     }
   ],
   "hostRules": [
