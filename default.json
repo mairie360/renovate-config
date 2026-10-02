@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":separateMajorReleases"
-  ],
+  "extends": ["config:recommended", ":separateMajorReleases"],
   "dependencyDashboard": true,
   "timezone": "Europe/Paris",
   "schedule": ["at any time"],
@@ -13,56 +10,55 @@
   "prHourlyLimit": 0,
   "packageRules": [
     {
-      "description": "Éviter l'automerge sur les versions 0.x par défaut",
+      "description": "Automerge every minor and patch update once the required CI checks pass (platform automerge waits for the branch ruleset checks)",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "GitHub Actions: SemVer tags only (no SHA digests)",
+      "matchManagers": ["github-actions"],
+      "pinDigests": false
+    },
+    {
+      "description": "Group Rust minor/patch updates in one PR",
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "rust dependencies"
+    },
+    {
+      "description": "Group TypeScript minor/patch updates in one PR",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "typescript dependencies"
+    },
+    {
+      "description": "Resolve @mairie360 packages from the GitHub registry",
+      "matchPackageNames": ["/^@mairie360\\//"],
+      "registryUrls": ["https://npm.pkg.github.com"],
+      "groupName": "mairie360 internal"
+    },
+    {
+      "description": "The database and liquibase-migrations images are released with the same tag: bump them together in one PR",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/mairie360/database", "ghcr.io/mairie360/liquibase-migrations"],
+      "groupName": "mairie360 database schema"
+    },
+    {
+      "description": "No automerge for minor bumps of 0.x dependencies: they can be breaking before 1.0 (patches still automerge)",
       "matchCurrentVersion": "/^0\\./",
+      "matchUpdateTypes": ["minor"],
       "automerge": false
     },
     {
-      "description": "GitHub Actions : Utiliser uniquement SemVer (pas de SHA) et Automerge",
-      "matchManagers": ["github-actions"],
-      "pinDigests": false, 
-      "automerge": true
-    },
-    {
-      "description": "Groupement & Automerge Rust (Minor/Patch)",
-      "matchManagers": ["cargo"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "rust dependencies",
-      "automerge": true
-    },
-    {
-      "description": "Groupement & Automerge TypeScript (Minor/Patch)",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "typescript dependencies",
-      "automerge": true
-    },
-    {
-      "description": "Force le registre GitHub pour les packages @mairie360",
-      "matchPackagePatterns": ["^@mairie360/"],
-      "registryUrls": ["https://npm.pkg.github.com"],
-      "groupName": "mairie360 internal",
-      "automerge": true
-    },
-    {
-      "description": "Automerge TOTAL (Majors incluses) pour le dev local",
+      "description": "Automerge everything (majors included) in local dev files",
       "matchFileNames": ["development.Dockerfile", "docker-compose.yml"],
       "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
       "automerge": true
     },
     {
-      "description": "Protection stricte du Dockerfile de production",
+      "description": "Never automerge the production Dockerfile",
       "matchFileNames": ["Dockerfile"],
       "automerge": false
-    },
-    {
-      "description": "The database and liquibase-migrations images are released with the same tag: bump them together in one PR",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": [
-        "ghcr.io/mairie360/database",
-        "ghcr.io/mairie360/liquibase-migrations"
-      ],
-      "groupName": "mairie360 database schema"
     }
   ],
   "customManagers": [
