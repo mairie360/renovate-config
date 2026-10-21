@@ -44,6 +44,11 @@
       "groupName": "mairie360 database schema"
     },
     {
+      "description": "mairie360/CICD is pinned in cicd.yml, promote-staging.yml and promote-prod.yml (`uses:` ref and `cicd_version`): bump every pin of a repo in one PR so they never drift (MAIR-494)",
+      "matchPackageNames": ["mairie360/CICD"],
+      "groupName": "mairie360/CICD"
+    },
+    {
       "description": "No automerge for minor bumps of 0.x dependencies: they can be breaking before 1.0 (patches still automerge)",
       "matchCurrentVersion": "/^0\\./",
       "matchUpdateTypes": ["minor"],
