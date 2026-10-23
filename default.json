@@ -5,12 +5,12 @@
   "timezone": "Europe/Paris",
   "schedule": ["at any time"],
   "labels": ["dependencies"],
-  "platformAutomerge": true,
+  "platformAutomerge": false,
   "prConcurrentLimit": 20,
   "prHourlyLimit": 0,
   "packageRules": [
     {
-      "description": "Automerge every minor and patch update once the required CI checks pass (platform automerge waits for the branch ruleset checks)",
+      "description": "Automerge minor and patch updates only after Renovate verifies the status checks, including artifact generation",
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },
