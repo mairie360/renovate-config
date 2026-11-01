@@ -5,12 +5,12 @@
   "timezone": "Europe/Paris",
   "schedule": ["at any time"],
   "labels": ["dependencies"],
-  "platformAutomerge": true,
+  "platformAutomerge": false,
   "prConcurrentLimit": 20,
   "prHourlyLimit": 0,
   "packageRules": [
     {
-      "description": "Automerge every minor and patch update once the required CI checks pass (platform automerge waits for the branch ruleset checks)",
+      "description": "Automerge minor and patch updates only after Renovate verifies the status checks, including artifact generation",
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },
@@ -42,6 +42,12 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/mairie360/database", "ghcr.io/mairie360/liquibase-migrations"],
       "groupName": "mairie360 database schema"
+    },
+    {
+      "description": "mairie360/CICD is pinned in cicd.yml, promote-staging.yml and promote-prod.yml (`uses:` ref and `cicd_version`): bump every pin of a repo in one PR so they never drift, and never automerge it: a CICD minor can ask the consumer for new files (v4.4.0 needs the promote workflows, MAIR-494)",
+      "matchPackageNames": ["mairie360/CICD"],
+      "groupName": "mairie360/CICD",
+      "automerge": false
     },
     {
       "description": "No automerge for minor bumps of 0.x dependencies: they can be breaking before 1.0 (patches still automerge)",
