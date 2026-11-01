@@ -75,6 +75,14 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>\\S+)\\s+\\w+ = \"(?<currentValue>[^\"]+)\""
       ]
+    },
+    {
+      "description": "The GDPR PR checklist (MAIR-295) pins mairie360/CICD twice in gdpr-pr.yml, at the `uses:` ref (github-actions manager) and in the `cicd_version` input: track the input too, so the mairie360/CICD group moves both in one PR. Each repo's renovate.json covers cicd.yml and the promote workflows.",
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)\\.github/workflows/gdpr-pr\\.ya?ml$/"],
+      "matchStrings": ["cicd_version:\\s*(?<currentValue>v\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "mairie360/CICD",
+      "datasourceTemplate": "github-tags"
     }
   ],
   "hostRules": [
