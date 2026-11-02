@@ -6,6 +6,7 @@
   "schedule": ["at any time"],
   "labels": ["dependencies"],
   "platformAutomerge": false,
+  "internalChecksFilter": "strict",
   "prConcurrentLimit": 20,
   "prHourlyLimit": 0,
   "packageRules": [
@@ -15,9 +16,30 @@
       "automerge": true
     },
     {
-      "description": "GitHub Actions: SemVer tags only (no SHA digests)",
-      "matchManagers": ["github-actions"],
+      "description": "Supply chain (MAIR-711): a new npm or crates.io release is only proposed, so only automerged, once it is 3 days old: compromised releases are usually pulled within 72 h. internalChecksFilter strict: no branch before that, the update waits in the Dependency Dashboard",
+      "matchManagers": ["npm", "cargo"],
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": "Our own packages (OpenAPI contracts, bffs-lib, lib-components, mairie360_api_lib) are published by our CI and pinned right away (dev releases): no quarantine",
+      "matchPackageNames": ["/^@mairie360\\//", "mairie360_api_lib"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Supply chain (MAIR-711): pin third-party GitHub Actions and container images by digest (the tag stays in a comment), so a moved tag cannot change what runs",
+      "matchManagers": ["github-actions", "dockerfile", "docker-compose"],
+      "pinDigests": true
+    },
+    {
+      "description": "Internal refs stay on their tags: mairie360/CICD moves with its cicd_version input, and the ghcr.io/mairie360 images are built by our own CI",
+      "matchPackageNames": ["mairie360/CICD", "/^ghcr\\.io\\/mairie360\\//"],
       "pinDigests": false
+    },
+    {
+      "description": "Pinning a digest freezes what the tag already resolves to: no quarantine (it would leave the ref unpinned longer) and automerge, except in the production Dockerfile (last rule)",
+      "matchUpdateTypes": ["pinDigest"],
+      "minimumReleaseAge": null,
+      "automerge": true
     },
     {
       "description": "Group Rust minor/patch updates in one PR",
