@@ -82,3 +82,20 @@ test('rules kept: mairie360/CICD and the production Dockerfile are never automer
   assert.equal(resolve({ manager: 'dockerfile', packageName: 'node', updateType: 'minor', fileName: 'Dockerfile' }).automerge, false);
   assert.notEqual(resolve({ manager: 'npm', packageName: 'express', updateType: 'major', currentVersion: '5.1.0' }).automerge, true);
 });
+
+for (const repository of ['mairie360/BFF_Project', 'mairie360/Projects_Web_Service']) {
+  test(`MAIR-998 no bump PR for the OpenAPI contracts in ${repository}`, () => {
+    for (const currentVersion of ['0.0.0-dev-156a9b9', '2.3.0']) {
+      const config = resolve({ manager: 'npm', datasource: 'npm', packageName: '@mairie360/core-api-openapi',
+        currentVersion, updateType: 'minor', repository });
+      assert.equal(config.enabled, false);
+      assert.equal(config.followTag, undefined);
+    }
+  });
+}
+
+test('MAIR-998 the libraries keep their bump PRs', () => {
+  for (const packageName of ['@mairie360/bffs-lib', '@mairie360/lib-components']) {
+    assert.notEqual(resolve({ manager: 'npm', datasource: 'npm', packageName, updateType: 'minor', currentVersion: '2.7.0' }).enabled, false);
+  }
+});
