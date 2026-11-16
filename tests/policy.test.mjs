@@ -99,3 +99,13 @@ test('MAIR-998 the libraries keep their bump PRs', () => {
     assert.notEqual(resolve({ manager: 'npm', datasource: 'npm', packageName, updateType: 'minor', currentVersion: '2.7.0' }).enabled, false);
   }
 });
+
+test('MAIR-1010 automerge at any time, but never a major, local dev files included', () => {
+  assert.deepEqual(preset.schedule, ['at any time']);
+  assert.equal(preset.automergeSchedule, undefined);
+  for (const fileName of ['docker-compose.yml', 'development.Dockerfile', 'package.json']) {
+    const manager = fileName === 'package.json' ? 'npm' : fileName.endsWith('Dockerfile') ? 'dockerfile' : 'docker-compose';
+    assert.notEqual(resolve({ manager, packageName: 'postgres', updateType: 'major', currentVersion: '17.0.0', fileName }).automerge, true, fileName);
+  }
+  assert.equal(resolve({ manager: 'docker-compose', packageName: 'postgres', updateType: 'minor', currentVersion: '17.0.0', fileName: 'docker-compose.yml' }).automerge, true);
+});
