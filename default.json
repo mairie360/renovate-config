@@ -84,9 +84,9 @@
       "enabled": false
     },
     {
-      "description": "Automerge everything (majors included) in local dev files",
+      "description": "Automerge the local dev files at any time, majors excepted (MAIR-1010: a major waits for a review, wherever it lands)",
       "matchFileNames": ["development.Dockerfile", "docker-compose.yml"],
-      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     },
     {
