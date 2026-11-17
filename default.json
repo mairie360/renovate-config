@@ -78,6 +78,12 @@
       "automerge": false
     },
     {
+      "description": "MAIR-998: the OpenAPI contract packages are bumped by hand, only when the code needs a new route or field. Compatibility with the upstream is proven by the test stacks, which run its image of the stage under test (ghcr.io/mairie360/<name>:${UPSTREAM_TAG:-dev}, mairie360/CICD); a Renovate PR per upstream release would only rerun every CI for a version number",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["/^@mairie360\\/.+-openapi$/"],
+      "enabled": false
+    },
+    {
       "description": "Automerge everything (majors included) in local dev files",
       "matchFileNames": ["development.Dockerfile", "docker-compose.yml"],
       "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
