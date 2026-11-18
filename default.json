@@ -105,9 +105,9 @@
       ]
     },
     {
-      "description": "The GDPR PR checklist (MAIR-295) pins mairie360/CICD twice in gdpr-pr.yml, at the `uses:` ref (github-actions manager) and in the `cicd_version` input: track the input too, so the mairie360/CICD group moves both in one PR. Each repo's renovate.json covers cicd.yml and the promote workflows.",
+      "description": "The GDPR PR checklist (MAIR-295) and the Renovate auto-approval each pin mairie360/CICD twice, in gdpr-pr.yml and auto-approve.yml, at the `uses:` ref (github-actions manager) and in the `cicd_version` input: track the input too, so the mairie360/CICD group moves both in one PR. Each repo's renovate.json covers cicd.yml and the promote workflows.",
       "customType": "regex",
-      "managerFilePatterns": ["/(^|/)\\.github/workflows/gdpr-pr\\.ya?ml$/"],
+      "managerFilePatterns": ["/(^|/)\\.github/workflows/(gdpr-pr|auto-approve)\\.ya?ml$/"],
       "matchStrings": ["cicd_version:\\s*(?<currentValue>v\\d+\\.\\d+\\.\\d+)"],
       "depNameTemplate": "mairie360/CICD",
       "datasourceTemplate": "github-tags"

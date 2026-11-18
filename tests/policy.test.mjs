@@ -109,3 +109,22 @@ test('MAIR-1010 automerge at any time, but never a major, local dev files includ
   }
   assert.equal(resolve({ manager: 'docker-compose', packageName: 'postgres', updateType: 'minor', currentVersion: '17.0.0', fileName: 'docker-compose.yml' }).automerge, true);
 });
+
+// MAIR-685: auto-approve.yml calls the reusable workflow of mairie360/CICD with a `cicd_version` input,
+// like gdpr-pr.yml: the regex manager must track that input so the mairie360/CICD group moves both pins.
+test('MAIR-685 the cicd_version input of auto-approve.yml and gdpr-pr.yml is tracked', () => {
+  const caller = `    uses: mairie360/CICD/.github/workflows/auto-approve.yml@v5.13.0
+    with:
+      cicd_version: v5.13.0   # same release as the \`uses:\` ref
+`;
+  for (const file of ['.github/workflows/auto-approve.yml', '.github/workflows/gdpr-pr.yml']) {
+    const managers = (preset.customManagers ?? []).filter((manager) =>
+      manager.managerFilePatterns.some((p) => pattern(p)?.test(file)));
+    const tracked = managers.filter((manager) => manager.depNameTemplate === 'mairie360/CICD');
+    assert.equal(tracked.length, 1, `${file} is tracked by one mairie360/CICD manager`);
+    const match = tracked[0].matchStrings.map((source) => new RegExp(source).exec(caller)).find(Boolean);
+    assert.equal(match?.groups.currentValue, 'v5.13.0', file);
+  }
+  assert.ok(!(preset.customManagers ?? []).some((manager) =>
+    manager.managerFilePatterns.some((p) => pattern(p)?.test('.github/workflows/cicd.yml'))), 'cicd.yml stays with each repository');
+});
